@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\Api\Website;
+
+use App\Http\Controllers\Api\BaseController;
+use App\Models\Website\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+class CategoryController extends BaseController
+{
+
+    public function index()
+    {
+        $categories = Category::latest()->get();
+        return $this->success($categories, 'Category list fetched');
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:categories,name',
+            'status' => 'boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation error', $validator->errors(), 422);
+        }
+
+        $category = Category::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'status' => $request->status ?? 1
+        ]);
+
+        return $this->success($category, 'Category created', 201);
+    }
+
+    public function show(int $id)
+    {   
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error('Category not found', null, 404);
+        }
+
+        return $this->success($category, 'Category fetched');
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error('Category not found', null, 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:categories,name,' . $id,
+            'status' => 'boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation error', $validator->errors(), 422);
+        }
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'status' => $request->status ?? $category->status
+        ]);
+
+        return $this->success($category, 'Category updated');
+    }
+
+    public function destroy(int $id)
+    {
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->error('Category not found', null, 404);
+        }
+
+        $category->delete();
+
+        return $this->success(null, 'Category deleted');
+    }
+}
