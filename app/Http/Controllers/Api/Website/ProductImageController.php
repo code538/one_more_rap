@@ -16,6 +16,19 @@ class ProductImageController extends BaseController
         return $this->success($images, 'Product images fetched');
     }
 
+    public function showByProduct($product_id)
+    {
+        $images = ProductImage::where('product_id', $product_id)
+                    ->orderBy('sort_order')
+                    ->get();
+
+        if ($images->isEmpty()) {
+            return $this->error('No images found for this product', null, 404);
+        }
+
+        return $this->success($images, 'Product images fetched');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

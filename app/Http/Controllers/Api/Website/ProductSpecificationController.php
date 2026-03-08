@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductSpecificationController extends BaseController
 {
+    public function index($product_id)
+    {
+        $specification = ProductSpecification::where('product_id', $product_id)->get();
+
+        if ($specification->isEmpty()) {
+            return $this->error('No specification found for this product', null, 404);
+        }
+
+        return $this->success($specification, 'Product specification fetched');
+    }
 
     public function store(Request $request)
     {

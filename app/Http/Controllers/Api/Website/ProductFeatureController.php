@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductFeatureController extends BaseController
 {
+    public function index($product_id)
+    {
+        $features = ProductFeature::where('product_id', $product_id)->get();
+
+        if ($features->isEmpty()) {
+            return $this->error('No features found for this product', null, 404);
+        }
+
+        return $this->success($features, 'Product features fetched');
+    }
+
 
     public function store(Request $request)
     {

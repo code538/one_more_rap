@@ -17,6 +17,20 @@ class ProductReviewController extends BaseController
         return $this->success($reviews, 'Product reviews fetched');
     }
 
+    public function showByProduct($product_id)
+    {
+        $reviews = ProductReview::where('product_id', $product_id)
+            ->with('product')
+            ->latest()
+            ->get();
+
+        if ($reviews->isEmpty()) {
+            return $this->error('No reviews found for this product', null, 404);
+        }
+
+        return $this->success($reviews, 'Product reviews fetched');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -13,7 +13,7 @@ class ProductController extends BaseController
 
     public function index()
     {
-        $products = Product::with(['category','subcategory'])->latest()->get();
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews'])->latest()->get();
         return $this->success($products, 'Product list fetched');
     }
 

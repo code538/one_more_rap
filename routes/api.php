@@ -54,9 +54,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('subcategories', SubcategoryController::class);
         
         Route::apiResource('products', ProductController::class);
+        Route::get('product-images/product/{product_id}', [ProductImageController::class, 'showByProduct']);
         Route::apiResource('product-images', ProductImageController::class)->only(['index','store','destroy']);
+        Route::get('product-features/product/{product_id}', [ProductFeatureController::class, 'index']);
         Route::apiResource('product-features', ProductFeatureController::class)->only(['store','destroy']);
+        Route::get('product-specifications/product/{product_id}', [ProductSpecificationController::class, 'index']);
         Route::apiResource('product-specifications', ProductSpecificationController::class)->only(['store','destroy']);
+        Route::get('product-reviews/product/{product_id}', [ProductReviewController::class, 'showByProduct']);
         Route::apiResource('product-reviews', ProductReviewController::class);
 
 
