@@ -7,6 +7,7 @@ use App\Models\Website\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends BaseController
 {
@@ -21,6 +22,9 @@ class CategoryController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'image_alt' => 'nullable|string|max:255',
+            'name_meta' => 'nullable|string|max:255',
             'status' => 'boolean'
         ]);
 
@@ -28,9 +32,18 @@ class CategoryController extends BaseController
             return $this->error('Validation error', $validator->errors(), 422);
         }
 
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         $category = Category::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'image' => $imagePath,
+            'image_alt' => $request->image_alt,
+            'name_meta' => $request->name_meta,
             'status' => $request->status ?? 1
         ]);
 
@@ -58,6 +71,9 @@ class CategoryController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'image_alt' => 'nullable|string|max:255',
+            'name_meta' => 'nullable|string|max:255',
             'status' => 'boolean'
         ]);
 
@@ -65,9 +81,23 @@ class CategoryController extends BaseController
             return $this->error('Validation error', $validator->errors(), 422);
         }
 
+        $imagePath = $category->image;
+
+        if ($request->hasFile('image')) {
+
+            if ($category->image && Storage::disk('public')->exists($category->image)) {
+                Storage::disk('public')->delete($category->image);
+            }
+
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
         $category->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'image' => $imagePath,
+            'image_alt' => $request->image_alt,
+            'name_meta' => $request->name_meta,
             'status' => $request->status ?? $category->status
         ]);
 
@@ -80,6 +110,10 @@ class CategoryController extends BaseController
 
         if (!$category) {
             return $this->error('Category not found', null, 404);
+        }
+
+        if ($category->image && Storage::disk('public')->exists($category->image)) {
+            Storage::disk('public')->delete($category->image);
         }
 
         $category->delete();

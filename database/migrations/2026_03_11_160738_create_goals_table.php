@@ -11,14 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('goals', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
+
+            $table->string('title'); // Build Muscle
+            $table->string('slug')->unique(); // build-muscle
+            $table->text('description')->nullable();
+
             $table->string('image')->nullable();
             $table->string('image_alt')->nullable();
-            $table->string('name_meta')->nullable();
+
+            $table->string('tag1')->nullable();
+            $table->string('tag2')->nullable();
+            $table->string('tag3')->nullable();
+
+            $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(1);
+
             $table->timestamps();
         });
     }
@@ -28,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('goals');
     }
 };

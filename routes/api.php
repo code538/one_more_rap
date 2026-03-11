@@ -13,6 +13,11 @@ use App\Http\Controllers\Api\Website\ProductSpecificationController;
 use App\Http\Controllers\Api\Website\ProductReviewController;
 use App\Http\Controllers\Api\FaqController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\Website\BannerController;
+use App\Http\Controllers\Api\Website\HowItWorkController;
+use App\Http\Controllers\Api\Website\GoalSectionController;
+use App\Http\Controllers\Api\Website\GoalController;
+use App\Http\Controllers\Api\Website\WhyChoseUsController;
 
 // Public Route Start ======================================
 Route::post('/register', [AuthController::class, 'register']);
@@ -26,6 +31,11 @@ Route::get('/seo/{pageKey}', [SeoSettingController::class, 'show']);
 
 Route::get('faqs', [FaqController::class, 'getFaqs']);
 Route::post('contact', [ContactController::class, 'store']);
+Route::get('/banners', [BannerController::class, 'userIndex']);
+Route::get('/how-it-works', [HowItWorkController::class, 'userIndex']);
+Route::get('/goals', [GoalSectionController::class, 'userIndex']);
+
+Route::get('why-choose-us', [WhyChoseUsController::class, 'userIndex']);
 
 /*
 |--------------------------------------------------------------------------
@@ -79,6 +89,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('contacts/status/{id}', [ContactController::class, 'updateStatus']);
         Route::delete('contacts/{id}', [ContactController::class, 'destroy']);
 
+        Route::post('/banners/update/{id}', [BannerController::class, 'update']);
+        Route::apiResource('banners', BannerController::class);
+
+        Route::apiResource('how-it-works', HowItWorkController::class);
+
+        Route::get('goal-sections', [GoalSectionController::class, 'index']);
+        Route::post('goal-sections', [GoalSectionController::class, 'store']);
+        Route::get('goal-sections/{id}', [GoalSectionController::class, 'show']);
+        Route::post('goal-sections/update/{id}', [GoalSectionController::class, 'update']);
+        Route::delete('goal-sections/delete/{id}', [GoalSectionController::class, 'destroy']);
+
+        Route::get('goals', [GoalController::class, 'index']);
+        Route::post('goals', [GoalController::class, 'store']);
+        Route::get('goals/{id}', [GoalController::class, 'show']);
+        Route::post('goals/update/{id}', [GoalController::class, 'update']);
+        Route::delete('goals/delete/{id}', [GoalController::class, 'destroy']);
+
+        Route::apiResource('why-choose-us', WhyChoseUsController::class);
 
     });
 

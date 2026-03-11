@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('why_chose_us', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('image')->nullable();
-            $table->string('image_alt')->nullable();
-            $table->string('name_meta')->nullable();
+
+            $table->string('badge')->nullable();
+            $table->string('title');
+            $table->text('description')->nullable();
+
+            $table->string('title_meta')->nullable();
+            $table->text('description_meta')->nullable();
+
             $table->boolean('status')->default(1);
+            $table->integer('short_order')->default(0);
+
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('why_chose_us');
     }
 };

@@ -7,6 +7,7 @@ use App\Models\Website\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class SubcategoryController extends BaseController
 {
@@ -22,6 +23,9 @@ class SubcategoryController extends BaseController
         $validator = Validator::make($request->all(), [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'image_alt' => 'nullable|string|max:255',
+            'name_meta' => 'nullable|string|max:255',
             'status' => 'boolean'
         ]);
 
@@ -29,10 +33,19 @@ class SubcategoryController extends BaseController
             return $this->error('Validation error', $validator->errors(), 422);
         }
 
+        $imagePath = null;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('subcategories', 'public');
+        }
+
         $subcategory = Subcategory::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'image' => $imagePath,
+            'image_alt' => $request->image_alt,
+            'name_meta' => $request->name_meta,
             'status' => $request->status ?? 1
         ]);
 
@@ -61,6 +74,9 @@ class SubcategoryController extends BaseController
         $validator = Validator::make($request->all(), [
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1024',
+            'image_alt' => 'nullable|string|max:255',
+            'name_meta' => 'nullable|string|max:255',
             'status' => 'boolean'
         ]);
 
@@ -68,10 +84,24 @@ class SubcategoryController extends BaseController
             return $this->error('Validation error', $validator->errors(), 422);
         }
 
+        $imagePath = $category->image;
+
+        if ($request->hasFile('image')) {
+
+            if ($category->image && Storage::disk('public')->exists($category->image)) {
+                Storage::disk('public')->delete($category->image);
+            }
+
+            $imagePath = $request->file('image')->store('subcategories', 'public');
+        }
+
         $subcategory->update([
             'category_id' => $request->category_id,
             'name' => $request->name,
             'slug' => Str::slug($request->name),
+            'image' => $imagePath,
+            'image_alt' => $request->image_alt,
+            'name_meta' => $request->name_meta,
             'status' => $request->status ?? $subcategory->status
         ]);
 
@@ -85,7 +115,9 @@ class SubcategoryController extends BaseController
         if (!$subcategory) {
             return $this->error('Subcategory not found', null, 404);
         }
-
+        if ($subcategory->image && Storage::disk('public')->exists($subcategory->image)) {
+            Storage::disk('public')->delete($subcategory->image);
+        }
         $subcategory->delete();
 
         return $this->success(null, 'Subcategory deleted');
