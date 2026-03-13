@@ -17,6 +17,41 @@ class ProductController extends BaseController
         return $this->success($products, 'Product list fetched');
     }
 
+    public function userIndex()
+    {
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
+        return $this->success($products, 'Product list fetched');
+    }
+
+    public function showProductDetails(int $id)
+    {
+        $product = Product::with([
+            'category',
+            'subcategory',
+            'images',
+            'features',
+            'specifications',
+            'reviews'
+        ])->where('status', 1)->find($id);
+
+        if (!$product) {
+            return $this->error('Product not found', null, 404);
+        }
+
+        return $this->success($product, 'Product details fetched');
+    }
+
+    public function getFeaturedProducts()
+    {
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews'])
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->limit(5)
+            ->get();
+
+        return $this->success($products, 'Featured products fetched');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

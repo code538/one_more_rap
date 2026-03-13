@@ -18,6 +18,12 @@ class CategoryController extends BaseController
         return $this->success($categories, 'Category list fetched');
     }
 
+    public function userIndex()
+    {
+        $categories = Category::where('status', 1)->latest()->get();
+        return $this->success($categories, 'Category list fetched');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -36,6 +36,13 @@ Route::get('/how-it-works', [HowItWorkController::class, 'userIndex']);
 Route::get('/goals', [GoalSectionController::class, 'userIndex']);
 
 Route::get('why-choose-us', [WhyChoseUsController::class, 'userIndex']);
+Route::get('category', [CategoryController::class, 'userIndex']);
+Route::get('subcategory/{category_id}', [SubcategoryController::class, 'userIndex']);
+Route::get('subcategory', [SubcategoryController::class, 'index']);
+Route::get('products', [ProductController::class, 'userIndex']);
+Route::get('products/{id}', [ProductController::class, 'showProductDetails']);
+Route::get('feature-products', [ProductController::class, 'getFeaturedProducts']);
+
 
 /*
 |--------------------------------------------------------------------------

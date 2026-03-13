@@ -18,6 +18,12 @@ class SubcategoryController extends BaseController
         return $this->success($subcategories, 'Subcategory list fetched');
     }
 
+    public function userIndex($category_id)
+    {
+        $subcategories = Subcategory::where('category_id', $category_id)->where('status', 1)->latest()->get();
+        return $this->success($subcategories, 'Subcategory list fetched');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
