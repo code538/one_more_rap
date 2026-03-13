@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function tracks()
+    {
+        return $this->hasMany(OrderTrack::class);
+    }
 }

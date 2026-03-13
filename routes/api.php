@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\Website\WhyChoseUsController;
 use App\Http\Controllers\Api\Website\PaymentSettingController;
 use App\Http\Controllers\Api\Website\CheckoutController;
 use App\Http\Controllers\Api\Website\PaymentController;
+use App\Http\Controllers\Api\Admin\OrderController;
 
 
 // Public Route Start ======================================
@@ -41,6 +42,7 @@ Route::get('/goals', [GoalSectionController::class, 'userIndex']);
 
 Route::get('why-choose-us', [WhyChoseUsController::class, 'userIndex']);
 Route::get('category', [CategoryController::class, 'userIndex']);
+Route::get('category/{slug}', [CategoryController::class, 'showProducts']);
 Route::get('subcategory/{category_id}', [SubcategoryController::class, 'userIndex']);
 Route::get('subcategory', [SubcategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'userIndex']);
@@ -124,6 +126,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/payment-settings/store', [PaymentSettingController::class, 'store']);
         Route::get('/payment-settings/{provider}', [PaymentSettingController::class, 'show']);
         Route::post('/payment-settings/status/{id}', [PaymentSettingController::class, 'updateStatus']);
+
+        Route::get('/orders',[OrderController::class,'index']);
+        Route::get('/orders/{id}',[OrderController::class,'show']);
+        Route::post('/orders/status/{id}',[OrderController::class,'updateStatus']);
+        Route::post('/orders/payment/{id}',[OrderController::class,'updatePayment']);
 
     });
 
