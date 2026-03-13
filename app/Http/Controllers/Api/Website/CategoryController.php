@@ -26,6 +26,27 @@ class CategoryController extends BaseController
         return $this->success($categories, 'Category list fetched');
     }
 
+    // public function showProducts($slug)
+    // {
+    //     $category = Category::where('slug', $slug)->first();
+
+    //     if (!$category) {
+    //         return $this->error('Category not found', null, 404);
+    //     }
+
+    //     $products = $category->products()->with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
+
+    //     $subCategory = Subcategory::where('category_id', $category->id)->where('status', 1)->get();
+
+    //     $data = [
+    //         'category' => $category,
+    //         'subcategories' => $subCategory,
+    //         'products' => $products
+    //     ];
+    //     //dd($subCategory);
+    //     return $this->success($products, 'Products fetched for category');
+    // }
+
     public function showProducts($slug)
     {
         $category = Category::where('slug', $slug)->first();
@@ -34,17 +55,30 @@ class CategoryController extends BaseController
             return $this->error('Category not found', null, 404);
         }
 
-        $products = $category->products()->with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
+        // Products directly under category
+        $categoryProducts = $category->products()
+            ->with(['category','subcategory','images','features','specifications','reviews'])
+            ->where('status', 1)
+            ->latest()
+            ->get();
 
-        $subCategory = Subcategory::where('category_id', $category->id)->where('status', 1)->latest()->get();
+        // Subcategories with their products
+        $subcategories = Subcategory::with(['products' => function ($query) {
+            $query->with(['category','subcategory','images','features','specifications','reviews'])
+                ->where('status',1)
+                ->latest();
+        }])
+        ->where('category_id', $category->id)
+        ->where('status', 1)
+        ->get();
 
         $data = [
             'category' => $category,
-            'subcategories' => $subCategory,
-            'products' => $products
+            'category_products' => $categoryProducts,
+            'subcategories' => $subcategories
         ];
 
-        return $this->success($products, 'Products fetched for category');
+        return $this->success($data, 'Products fetched for category');
     }
 
     public function store(Request $request)
