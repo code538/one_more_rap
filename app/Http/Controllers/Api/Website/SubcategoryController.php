@@ -84,12 +84,12 @@ class SubcategoryController extends BaseController
             return $this->error('Validation error', $validator->errors(), 422);
         }
 
-        $imagePath = $category->image;
+        $imagePath = $subcategory->image;
 
         if ($request->hasFile('image')) {
 
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
+            if ($subcategory->image && Storage::disk('public')->exists($subcategory->image)) {
+                Storage::disk('public')->delete($subcategory->image);
             }
 
             $imagePath = $request->file('image')->store('subcategories', 'public');
