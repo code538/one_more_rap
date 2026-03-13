@@ -35,6 +35,14 @@ class CategoryController extends BaseController
 
         $products = $category->products()->with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
 
+        $subCategory = Subcategory::where('category_id', $category->id)->where('status', 1)->latest()->get();
+
+        $data = [
+            'category' => $category,
+            'subcategories' => $subCategory,
+            'products' => $products
+        ];
+
         return $this->success($products, 'Products fetched for category');
     }
 
