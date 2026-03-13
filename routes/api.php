@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Website\PaymentSettingController;
 use App\Http\Controllers\Api\Website\CheckoutController;
 use App\Http\Controllers\Api\Website\PaymentController;
 use App\Http\Controllers\Api\Admin\OrderController;
+use App\Http\Controllers\Api\Admin\DashboardController;
 
 
 // Public Route Start ======================================
@@ -131,6 +132,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/orders/{id}',[OrderController::class,'show']);
         Route::post('/orders/status/{id}',[OrderController::class,'updateStatus']);
         Route::post('/orders/payment/{id}',[OrderController::class,'updatePayment']);
+
+        Route::get('/dashboard',[DashboardController::class,'dashboardCounts']);
 
     });
 
