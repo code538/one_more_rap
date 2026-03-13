@@ -18,6 +18,10 @@ use App\Http\Controllers\Api\Website\HowItWorkController;
 use App\Http\Controllers\Api\Website\GoalSectionController;
 use App\Http\Controllers\Api\Website\GoalController;
 use App\Http\Controllers\Api\Website\WhyChoseUsController;
+use App\Http\Controllers\Api\Website\PaymentSettingController;
+use App\Http\Controllers\Api\Website\CheckoutController;
+use App\Http\Controllers\Api\Website\PaymentController;
+
 
 // Public Route Start ======================================
 Route::post('/register', [AuthController::class, 'register']);
@@ -42,6 +46,7 @@ Route::get('subcategory', [SubcategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'userIndex']);
 Route::get('products/{id}', [ProductController::class, 'showProductDetails']);
 Route::get('feature-products', [ProductController::class, 'getFeaturedProducts']);
+
 
 
 /*
@@ -115,6 +120,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::apiResource('why-choose-us', WhyChoseUsController::class);
 
+        Route::get('/payment-settings', [PaymentSettingController::class, 'index']);
+        Route::post('/payment-settings/store', [PaymentSettingController::class, 'store']);
+        Route::get('/payment-settings/{provider}', [PaymentSettingController::class, 'show']);
+        Route::post('/payment-settings/status/{id}', [PaymentSettingController::class, 'updateStatus']);
+
     });
 
    
@@ -124,7 +134,9 @@ Route::middleware('auth:sanctum')->group(function () {
             return ['message' => 'User area'];
         });
 
-        // all user API here
+        Route::post('/checkout',[CheckoutController::class,'checkout']);
+        Route::get('/payment/razorpay/{order_id}',[PaymentController::class,'createRazorpayOrder']);
+        Route::post('/payment/verify',[PaymentController::class,'verifyPayment']);
     
     });
 
