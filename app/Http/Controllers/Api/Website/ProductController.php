@@ -23,7 +23,7 @@ class ProductController extends BaseController
         return $this->success($products, 'Product list fetched');
     }
 
-    public function showProductDetails(int $id)
+    public function showProductDetails(string $slug)
     {
         $product = Product::with([
             'category',
@@ -32,7 +32,7 @@ class ProductController extends BaseController
             'features',
             'specifications',
             'reviews'
-        ])->where('status', 1)->find($id);
+        ])->where('status', 1)->where('slug', $slug)->first();
 
         if (!$product) {
             return $this->error('Product not found', null, 404);

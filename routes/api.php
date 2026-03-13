@@ -46,7 +46,7 @@ Route::get('category/{slug}', [CategoryController::class, 'showProducts']);
 Route::get('subcategory/{category_id}', [SubcategoryController::class, 'userIndex']);
 Route::get('subcategory', [SubcategoryController::class, 'index']);
 Route::get('products', [ProductController::class, 'userIndex']);
-Route::get('products/{id}', [ProductController::class, 'showProductDetails']);
+Route::get('products/{slug}', [ProductController::class, 'showProductDetails']);
 Route::get('feature-products', [ProductController::class, 'getFeaturedProducts']);
 
 
