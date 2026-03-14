@@ -146,6 +146,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
         Route::post('/checkout',[CheckoutController::class,'checkout']);
+        Route::post('/checkout/{order_id}',[CheckoutController::class,'checkoutCod']);
         Route::get('/payment/razorpay/{order_id}',[PaymentController::class,'createRazorpayOrder']);
         Route::post('/payment/verify',[PaymentController::class,'verifyPayment']);
 

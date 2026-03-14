@@ -17,12 +17,12 @@ class CheckoutController extends BaseController
     {
        
         $request->validate([
-            'receiver_name' => 'required',
-            'receiver_phone' => 'required',
-            'address' => 'required',
-            'city' => 'required',
-            'state' => 'required',
-            'pincode' => 'required',
+            // 'receiver_name' => 'required',
+            // 'receiver_phone' => 'required',
+            // 'address' => 'required',
+            // 'city' => 'required',
+            // 'state' => 'required',
+            // 'pincode' => 'required',
             'products'=>'required|array'
 
         ]);
@@ -52,16 +52,16 @@ class CheckoutController extends BaseController
             'email'=>auth()->user()->email ?? 'Guest@example.com',
             'phone'=>auth()->user()->phone ?? null,
 
-            'receiver_name' => $request->receiver_name,
-            'receiver_phone' => $request->receiver_phone,
-            'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'pincode' => $request->pincode,
+            // 'receiver_name' => $request->receiver_name,
+            // 'receiver_phone' => $request->receiver_phone,
+            // 'address' => $request->address,
+            // 'city' => $request->city,
+            // 'state' => $request->state,
+            // 'pincode' => $request->pincode,
 
             'total_amount'=>$total,
 
-            'payment_method'=>$request->payment_method
+            //'payment_method'=>$request->payment_method
 
         ]);
 
@@ -83,6 +83,40 @@ class CheckoutController extends BaseController
         }
 
         return $this->success($order,'Order created successfully');
+
+    }
+
+    public function checkoutCod(Request $request, $order_number)
+    {
+         $request->validate([
+            'receiver_name' => 'required',
+            'receiver_phone' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'pincode' => 'required',
+            'payment_method'=>'required'
+
+        ]);
+
+        $order = Order::where('order_number',$order_number)
+                    ->where('user_id',auth()->id())
+                    ->first();
+
+        if(!$order){
+            return $this->error('Order not found');
+        }
+
+        $order->receiver_name = $request->receiver_name;
+        $order->receiver_phone = $request->receiver_phone;
+        $order->address = $request->address;
+        $order->city = $request->city;
+        $order->state = $request->state;
+        $order->pincode = $request->pincode;
+        $order->payment_method = $request->payment_method;
+        $order->save();
+
+        return $this->success($order,'Order placed successfully');
 
     }
 
