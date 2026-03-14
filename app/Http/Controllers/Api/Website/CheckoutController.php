@@ -89,7 +89,7 @@ class CheckoutController extends BaseController
     {
 
         $order = Order::with([
-            'items.product',
+            'items.product.images',
             'payment'
         ])
         ->where('id',$id)
