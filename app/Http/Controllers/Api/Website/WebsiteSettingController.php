@@ -16,6 +16,7 @@ class WebsiteSettingController extends BaseController
      */
     public function show()
     {
+        //dd('okk');
         $settings = WebsiteSetting::active();
 
         if (! $settings) {
