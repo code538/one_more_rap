@@ -123,7 +123,7 @@ class AuthController extends BaseController
     }
 
     public function profile(Request $request)
-    {   dd('okk');
+    {   //dd('okk');
         $user = $request->user();
 
         return $this->success([
