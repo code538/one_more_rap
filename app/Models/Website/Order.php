@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
      protected $fillable = [
+        'user_id',
         'order_number',
         'customer_name',
         'email',
@@ -33,5 +34,10 @@ class Order extends Model
     public function tracks()
     {
         return $this->hasMany(OrderTrack::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

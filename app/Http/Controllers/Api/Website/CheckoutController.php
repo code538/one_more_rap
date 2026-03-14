@@ -8,6 +8,7 @@ use App\Models\Website\Order;
 use App\Models\Website\OrderItem;
 use App\Models\Website\Product;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends BaseController
 {
@@ -40,6 +41,7 @@ class CheckoutController extends BaseController
 
         $order = Order::create([
 
+            'user_id' => auth()->id(),
             'order_number' => 'ORD'.time(),
 
             'customer_name'=>$request->customer_name,
@@ -76,7 +78,7 @@ class CheckoutController extends BaseController
     public function myOrders(Request $request)
     {
 
-        $orders = Order::where('email',$request->email)
+        $orders = Order::where('email',auth()->id())
                     ->latest()
                     ->get();
 
