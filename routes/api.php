@@ -141,9 +141,8 @@ Route::middleware('auth:sanctum')->group(function () {
    
     Route::middleware('role:user')->prefix('user')->group(function () {
 
-        Route::get('/profile', function () {
-            return ['message' => 'User area'];
-        });
+        Route::get('profile',[AuthController::class,'profile']);
+        Route::post('profile/update',[AuthController::class,'updateProfile']);
 
         Route::post('/checkout',[CheckoutController::class,'checkout']);
         Route::post('/checkout/{id}',[CheckoutController::class,'checkoutCod']);
@@ -152,6 +151,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/my-orders',[CheckoutController::class,'myOrders']);
         Route::get('/order/details/{id}',[CheckoutController::class,'orderDetails']);
+
+        Route::get('/my-compleate-orders',[CheckoutController::class,'myCompleateOrders']);
+        Route::get('/my-compleate-orders/details/{id}',[CheckoutController::class,'myCompleateOrdersDetails']);
     
     });
 

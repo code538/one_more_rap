@@ -152,4 +152,36 @@ class CheckoutController extends BaseController
 
     }
 
+    public function myCompleateOrders(Request $request)
+    {
+
+        $orders = Order::where('user_id', auth()->id())
+            ->where('payment_status', 'paid')
+            ->latest()
+            ->get();
+
+        return $this->success($orders,'My orders fetched');
+
+    }
+
+    public function myCompleateOrdersDetails($id)
+    {
+
+        $order = Order::with([
+            'items.product.images',
+            'payment'
+        ])
+        ->where('id',$id)
+        ->where('payment_status', 'paid')
+        ->where('user_id',auth()->id())
+        ->first();
+
+        if(!$order){
+            return $this->error('Order not found');
+        }
+
+        return $this->success($order,'Order details fetched');
+
+    }
+
 }

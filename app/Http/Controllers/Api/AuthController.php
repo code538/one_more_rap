@@ -121,5 +121,68 @@ class AuthController extends BaseController
 
         return $this->success(null, 'Password reset successful');
     }
+
+    public function profile(Request $request)
+    {   dd('okk');
+        $user = $request->user();
+
+        return $this->success([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->role
+        ], 'User profile fetched');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string',
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string',
+            'password' => 'nullable|min:6|confirmed'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation error', $validator->errors(), 422);
+        }
+
+        if ($request->filled('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('phone')) {
+            $user->phone = $request->phone;
+        }
+
+        $newToken = null;
+
+        if ($request->filled('password')) {
+
+            $user->password = Hash::make($request->password);
+
+            // delete current token
+            $request->user()->currentAccessToken()->delete();
+
+            // create new token
+            $newToken = $user->createToken('auth_token')->plainTextToken;
+        }
+
+        $user->save();
+
+        return $this->success([
+            'user' => $user,
+            'token' => $newToken
+        ], 'Profile updated successfully');
+    }
+    
+
 }
 
