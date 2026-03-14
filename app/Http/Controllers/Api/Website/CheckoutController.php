@@ -28,6 +28,10 @@ class CheckoutController extends BaseController
 
             $product = Product::find($item['product_id']);
 
+            if (!$product) {
+                return $this->error('Product not found: '.$item['product_id']);
+            }
+
             $price = $product->sale_price ?? $product->price;
 
             $total += $price * $item['qty'];
