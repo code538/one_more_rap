@@ -15,11 +15,8 @@ class CheckoutController extends BaseController
 
     public function checkout(Request $request)
     {
-        //dd('okk');
+       
         $request->validate([
-            'customer_name'=>'required',
-            'email'=>'required',
-            'phone'=>'required',
             'products'=>'required|array'
         ]);
 
@@ -44,9 +41,9 @@ class CheckoutController extends BaseController
             'user_id' => auth()->id(),
             'order_number' => 'ORD'.time(),
 
-            'customer_name'=>$request->customer_name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
+            'customer_name'=>auth()->user()->name ?? 'Guest',
+            'email'=>auth()->user()->email ?? 'Guest@example.com',
+            'phone'=>auth()->user()->phone ?? null,
 
             'total_amount'=>$total,
 

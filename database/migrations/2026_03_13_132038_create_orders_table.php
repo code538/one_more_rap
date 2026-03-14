@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->string('customer_name');
             $table->string('email');
-            $table->string('phone');
+            $table->string('phone')->nullable();
 
             $table->decimal('total_amount',10,2);
 
