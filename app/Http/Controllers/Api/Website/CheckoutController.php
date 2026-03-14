@@ -78,7 +78,7 @@ class CheckoutController extends BaseController
     public function myOrders(Request $request)
     {
 
-        $orders = Order::where('email',auth()->id())
+        $orders = Order::where('user_id', auth()->id())
                     ->latest()
                     ->get();
 
@@ -94,7 +94,10 @@ class CheckoutController extends BaseController
         $order = Order::with([
             'items.product',
             'payment'
-        ])->find($id);
+        ])
+        ->where('id',$id)
+        ->where('user_id',auth()->id())
+        ->first();
 
         if(!$order){
             return $this->error('Order not found');
