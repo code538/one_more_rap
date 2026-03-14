@@ -17,7 +17,14 @@ class CheckoutController extends BaseController
     {
        
         $request->validate([
+            'receiver_name' => 'required',
+            'receiver_phone' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'pincode' => 'required',
             'products'=>'required|array'
+
         ]);
 
         $total = 0;
@@ -44,6 +51,13 @@ class CheckoutController extends BaseController
             'customer_name'=>auth()->user()->name ?? 'Guest',
             'email'=>auth()->user()->email ?? 'Guest@example.com',
             'phone'=>auth()->user()->phone ?? null,
+
+            'receiver_name' => $request->receiver_name,
+            'receiver_phone' => $request->receiver_phone,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'pincode' => $request->pincode,
 
             'total_amount'=>$total,
 

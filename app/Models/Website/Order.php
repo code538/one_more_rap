@@ -15,6 +15,14 @@ class Order extends Model
         'customer_name',
         'email',
         'phone',
+
+        'receiver_name',
+        'receiver_phone',
+        'address',
+        'city',
+        'state',
+        'pincode',
+
         'total_amount',
         'payment_method',
         'payment_status',
