@@ -148,6 +148,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/checkout',[CheckoutController::class,'checkout']);
         Route::get('/payment/razorpay/{order_id}',[PaymentController::class,'createRazorpayOrder']);
         Route::post('/payment/verify',[PaymentController::class,'verifyPayment']);
+
+        Route::get('/my-orders',[CheckoutController::class,'myOrders']);
+        Route::get('/order/details/{id}',[CheckoutController::class,'orderDetails']);
     
     });
 

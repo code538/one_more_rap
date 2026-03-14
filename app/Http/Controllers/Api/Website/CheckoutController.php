@@ -73,4 +73,33 @@ class CheckoutController extends BaseController
 
     }
 
+    public function myOrders(Request $request)
+    {
+
+        $orders = Order::where('email',$request->email)
+                    ->latest()
+                    ->get();
+
+        return $this->success($orders,'My orders fetched');
+
+    }
+
+
+    // Order details
+    public function orderDetails($id)
+    {
+
+        $order = Order::with([
+            'items.product',
+            'payment'
+        ])->find($id);
+
+        if(!$order){
+            return $this->error('Order not found');
+        }
+
+        return $this->success($order,'Order details fetched');
+
+    }
+
 }
