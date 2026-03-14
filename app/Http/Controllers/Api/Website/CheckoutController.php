@@ -86,7 +86,7 @@ class CheckoutController extends BaseController
 
     }
 
-    public function checkoutCod(Request $request, $order_number)
+    public function checkoutCod(Request $request, $id)
     {
          $request->validate([
             'receiver_name' => 'required',
@@ -99,7 +99,7 @@ class CheckoutController extends BaseController
 
         ]);
 
-        $order = Order::where('order_number',$order_number)
+        $order = Order::where('id',$id)
                     ->where('user_id',auth()->id())
                     ->first();
 
