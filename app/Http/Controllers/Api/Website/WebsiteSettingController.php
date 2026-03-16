@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Website;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Website\WebsiteSetting;
+use App\Models\Website\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -18,12 +19,16 @@ class WebsiteSettingController extends BaseController
     {
         //dd('okk');
         $settings = WebsiteSetting::active();
-
+        $faq = Faq::where('slug', 'contact')->where('is_active', true)->get();
+        $data =[
+            'settings'=>$settings,
+            'faqs'  => $faq
+        ];
         if (! $settings) {
             return $this->error('Website settings not found', null, 404);
         }
 
-        return $this->success($settings, 'Website settings fetched');
+        return $this->success($data, 'Website settings fetched');
     }
 
     /**
