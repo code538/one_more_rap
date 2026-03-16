@@ -13,13 +13,13 @@ class ProductController extends BaseController
 
     public function index()
     {
-        $products = Product::with(['category','subcategory','images','features','specifications','reviews'])->latest()->get();
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews','variants'])->latest()->get();
         return $this->success($products, 'Product list fetched');
     }
 
     public function userIndex()
     {
-        $products = Product::with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews','variants'])->where('status', 1)->latest()->get();
         return $this->success($products, 'Product list fetched');
     }
 
@@ -31,7 +31,8 @@ class ProductController extends BaseController
             'images',
             'features',
             'specifications',
-            'reviews'
+            'reviews',
+            'variants'
         ])->where('status', 1)->where('slug', $slug)->first();
 
         if (!$product) {

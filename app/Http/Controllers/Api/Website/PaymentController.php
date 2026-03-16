@@ -47,29 +47,6 @@ class PaymentController extends BaseController
 
     }
 
-    // public function verifyPayment(Request $request)
-    // {
-
-    //     $payment = Payment::create([
-
-    //         'order_id'=>$request->order_id,
-    //         'payment_gateway'=>'razorpay',
-    //         'payment_id'=>$request->razorpay_payment_id,
-    //         'transaction_id'=>$request->razorpay_order_id,
-    //         'amount'=>$request->amount,
-    //         'status'=>'paid'
-
-    //     ]);
-
-    //     Order::where('id',$request->order_id)
-    //         ->update([
-    //             'payment_status'=>'paid'
-    //         ]);
-
-    //     return $this->success($payment,'Payment successful');
-
-    // }
-
     public function verifyPayment(Request $request)
     {
 

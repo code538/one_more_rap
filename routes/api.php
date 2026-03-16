@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\Website\CheckoutController;
 use App\Http\Controllers\Api\Website\PaymentController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Website\ProductVariantController;
 
 
 // Public Route Start ======================================
@@ -136,6 +137,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/orders/payment/{id}',[OrderController::class,'updatePayment']);
 
         Route::get('/dashboard',[DashboardController::class,'dashboardCounts']);
+
+        Route::get('product-variants/{product_id}',[ProductVariantController::class,'index']);
+        Route::post('product-variants',[ProductVariantController::class,'store']);
+        Route::get('product-verients/{id}',[ProductVariantController::class,'edit']);
+        Route::post('product-variants/update/{id}',[ProductVariantController::class,'update']);
+        Route::delete('product-variants/{id}',[ProductVariantController::class,'destroy']);
 
     });
 

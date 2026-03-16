@@ -53,7 +53,7 @@ class AuthController extends BaseController
         }
 
         $user = User::where('email', $request->email)->first();
-
+        //dd($user);
         if (! $user || $request->password !== $user->password) {
             return $this->error('Invalid credentials', null, 401);
         }
@@ -166,7 +166,7 @@ class AuthController extends BaseController
 
         if ($request->filled('password')) {
 
-            $user->password = Hash::make($request->password);
+            $user->password = $request->password;
 
             // delete current token
             $request->user()->currentAccessToken()->delete();

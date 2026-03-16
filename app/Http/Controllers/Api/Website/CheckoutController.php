@@ -7,83 +7,160 @@ use Illuminate\Http\Request;
 use App\Models\Website\Order;
 use App\Models\Website\OrderItem;
 use App\Models\Website\Product;
+use App\Models\Website\ProductVariant;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends BaseController
 {
 
+    // public function checkout(Request $request)
+    // {
+       
+    //     $request->validate([
+    //         // 'receiver_name' => 'required',
+    //         // 'receiver_phone' => 'required',
+    //         // 'address' => 'required',
+    //         // 'city' => 'required',
+    //         // 'state' => 'required',
+    //         // 'pincode' => 'required',
+    //         'products'=>'required|array'
+
+    //     ]);
+
+    //     $total = 0;
+
+    //     foreach($request->products as $item){
+
+    //         $product = Product::find($item['product_id']);
+
+    //         if (!$product) {
+    //             return $this->error('Product not found: '.$item['product_id']);
+    //         }
+
+    //         $price = $product->sale_price ?? $product->price;
+
+    //         $total += $price * $item['qty'];
+
+    //     }
+
+    //     $order = Order::create([
+
+    //         'user_id' => auth()->id(),
+    //         'order_number' => 'ORD'.time(),
+
+    //         'customer_name'=>auth()->user()->name ?? 'Guest',
+    //         'email'=>auth()->user()->email ?? 'Guest@example.com',
+    //         'phone'=>auth()->user()->phone ?? null,
+
+    //         // 'receiver_name' => $request->receiver_name,
+    //         // 'receiver_phone' => $request->receiver_phone,
+    //         // 'address' => $request->address,
+    //         // 'city' => $request->city,
+    //         // 'state' => $request->state,
+    //         // 'pincode' => $request->pincode,
+
+    //         'total_amount'=>$total,
+
+    //         //'payment_method'=>$request->payment_method
+
+    //     ]);
+
+    //     foreach($request->products as $item){
+
+    //         $product = Product::find($item['product_id']);
+
+    //         $price = $product->sale_price ?? $product->price;
+
+    //         OrderItem::create([
+
+    //             'order_id'=>$order->id,
+    //             'product_id'=>$product->id,
+    //             'qty'=>$item['qty'],
+    //             'price'=>$price
+
+    //         ]);
+
+    //     }
+
+    //     return $this->success($order,'Order created successfully');
+
+    // }
+
     public function checkout(Request $request)
     {
-       
         $request->validate([
-            // 'receiver_name' => 'required',
-            // 'receiver_phone' => 'required',
-            // 'address' => 'required',
-            // 'city' => 'required',
-            // 'state' => 'required',
-            // 'pincode' => 'required',
-            'products'=>'required|array'
-
+            'products' => 'required|array'
         ]);
 
         $total = 0;
 
-        foreach($request->products as $item){
+        foreach ($request->products as $item) {
 
             $product = Product::find($item['product_id']);
 
             if (!$product) {
-                return $this->error('Product not found: '.$item['product_id']);
+                return $this->error('Product not found: ' . $item['product_id']);
             }
 
-            $price = $product->sale_price ?? $product->price;
+            // If variant exists
+            if (!empty($item['variant_id'])) {
+
+                $variant = ProductVariant::where('id',$item['variant_id'])
+                            ->where('product_id',$product->id)
+                            ->first();
+
+                if (!$variant) {
+                    return $this->error('Variant not found');
+                }
+
+                $price = $variant->sale_price ?? $variant->price;
+
+            } else {
+
+                $price = $product->sale_price ?? $product->price;
+
+            }
 
             $total += $price * $item['qty'];
-
         }
 
         $order = Order::create([
-
             'user_id' => auth()->id(),
             'order_number' => 'ORD'.time(),
 
-            'customer_name'=>auth()->user()->name ?? 'Guest',
-            'email'=>auth()->user()->email ?? 'Guest@example.com',
-            'phone'=>auth()->user()->phone ?? null,
+            'customer_name' => auth()->user()->name ?? 'Guest',
+            'email' => auth()->user()->email ?? 'Guest@example.com',
+            'phone' => auth()->user()->phone ?? null,
 
-            // 'receiver_name' => $request->receiver_name,
-            // 'receiver_phone' => $request->receiver_phone,
-            // 'address' => $request->address,
-            // 'city' => $request->city,
-            // 'state' => $request->state,
-            // 'pincode' => $request->pincode,
-
-            'total_amount'=>$total,
-
-            //'payment_method'=>$request->payment_method
-
+            'total_amount' => $total
         ]);
 
-        foreach($request->products as $item){
+        foreach ($request->products as $item) {
 
             $product = Product::find($item['product_id']);
 
-            $price = $product->sale_price ?? $product->price;
+            if (!empty($item['variant_id'])) {
+
+                $variant = ProductVariant::find($item['variant_id']);
+                $price = $variant->sale_price ?? $variant->price;
+
+            } else {
+
+                $price = $product->sale_price ?? $product->price;
+
+            }
 
             OrderItem::create([
-
-                'order_id'=>$order->id,
-                'product_id'=>$product->id,
-                'qty'=>$item['qty'],
-                'price'=>$price
-
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'variant_id' => $item['variant_id'] ?? null,
+                'qty' => $item['qty'],
+                'price' => $price
             ]);
-
         }
 
         return $this->success($order,'Order created successfully');
-
     }
 
     public function checkoutCod(Request $request, $id)
@@ -138,6 +215,7 @@ class CheckoutController extends BaseController
 
         $order = Order::with([
             'items.product.images',
+            'items.product.variants',
             'payment'
         ])
         ->where('id',$id)
@@ -169,6 +247,7 @@ class CheckoutController extends BaseController
 
         $order = Order::with([
             'items.product.images',
+            'items.product.variants',
             'payment'
         ])
         ->where('id',$id)
