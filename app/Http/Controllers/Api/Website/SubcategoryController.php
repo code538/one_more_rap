@@ -32,7 +32,7 @@ class SubcategoryController extends BaseController
             return $this->error('Subcategory not found', null, 404);
         }
 
-        $products = $subcategory->products()->with(['category','subcategory','images','features','specifications','reviews'])->where('status', 1)->latest()->get();
+        $products = $subcategory->products()->with(['category','subcategory','images','features','specifications','reviews','variants'])->where('status', 1)->latest()->get();
 
         $data = [
             'subcategory' => $subcategory,

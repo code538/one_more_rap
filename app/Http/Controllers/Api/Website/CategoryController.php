@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BaseController;
 use App\Models\Website\Category;
 use App\Models\Website\Product;
 use App\Models\Website\Subcategory;
+use App\Models\Website\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -57,7 +58,7 @@ class CategoryController extends BaseController
 
         // Products directly under category
         $categoryProducts = $category->products()
-            ->with(['category','subcategory','images','features','specifications','reviews'])
+            ->with(['category','subcategory','images','features','specifications','reviews','variants'])
             ->where('status', 1)
             ->latest()
             ->get();
