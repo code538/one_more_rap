@@ -19,7 +19,7 @@ class WebsiteSettingController extends BaseController
     {
         //dd('okk');
         $settings = WebsiteSetting::active();
-        $faq = Faq::where('slug', 'contact')->where('is_active', true)->get();
+        $faq = Faq::where('faq_slug', 'contact')->where('is_active', true)->get();
         $data =[
             'settings'=>$settings,
             'faqs'  => $faq
