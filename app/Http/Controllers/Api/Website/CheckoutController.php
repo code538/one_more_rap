@@ -210,12 +210,32 @@ class CheckoutController extends BaseController
 
 
     // Order details
+    // public function orderDetails($id)
+    // {
+
+    //     $order = Order::with([
+    //         'items.product.images',
+    //         'items.product.variants',
+    //         'payment'
+    //     ])
+    //     ->where('id',$id)
+    //     ->where('user_id',auth()->id())
+    //     ->first();
+
+    //     if(!$order){
+    //         return $this->error('Order not found');
+    //     }
+
+    //     return $this->success($order,'Order details fetched');
+
+    // }
+
     public function orderDetails($id)
     {
 
         $order = Order::with([
             'items.product.images',
-            'items.product.variants',
+            'items.variant',   // load only ordered variant
             'payment'
         ])
         ->where('id',$id)
