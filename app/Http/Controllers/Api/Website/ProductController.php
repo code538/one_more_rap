@@ -23,6 +23,25 @@ class ProductController extends BaseController
         return $this->success($products, 'Product list fetched');
     }
 
+    // public function showProductDetails(string $slug)
+    // {
+    //     $product = Product::with([
+    //         'category',
+    //         'subcategory',
+    //         'images',
+    //         'features',
+    //         'specifications',
+    //         'reviews',
+    //         'variants'
+    //     ])->where('status', 1)->where('slug', $slug)->first();
+
+    //     if (!$product) {
+    //         return $this->error('Product not found', null, 404);
+    //     }
+
+    //     return $this->success($product, 'Product details fetched');
+    // }
+
     public function showProductDetails(string $slug)
     {
         $product = Product::with([
@@ -31,13 +50,49 @@ class ProductController extends BaseController
             'images',
             'features',
             'specifications',
-            'reviews',
-            'variants'
-        ])->where('status', 1)->where('slug', $slug)->first();
+            'variants',
+            'reviews' => function ($q) {
+                $q->where('status', 1);
+            }
+        ])
+        ->where('status', 1)
+        ->where('slug', $slug)
+        ->first();
 
         if (!$product) {
             return $this->error('Product not found', null, 404);
         }
+
+        // ✅ Total Reviews
+        $reviewCount = $product->reviews->count();
+
+        // ✅ Average Rating
+        $avgRating = $product->reviews->avg('rating');
+
+        // ✅ Rating Breakdown
+        $ratingBreakdown = [
+            5 => $product->reviews->where('rating', 5)->count(),
+            4 => $product->reviews->where('rating', 4)->count(),
+            3 => $product->reviews->where('rating', 3)->count(),
+            2 => $product->reviews->where('rating', 2)->count(),
+            1 => $product->reviews->where('rating', 1)->count(),
+        ];
+
+        // ✅ Rating Ratio (percentage)
+        $ratingPercentage = [];
+        foreach ($ratingBreakdown as $star => $count) {
+            $ratingPercentage[$star] = $reviewCount > 0 
+                ? round(($count / $reviewCount) * 100, 2) 
+                : 0;
+        }
+
+        // ✅ Attach extra data
+        $product->review_summary = [
+            'average_rating' => round($avgRating, 1),
+            'total_reviews' => $reviewCount,
+            'rating_breakdown' => $ratingBreakdown,
+            'rating_percentage' => $ratingPercentage
+        ];
 
         return $this->success($product, 'Product details fetched');
     }
