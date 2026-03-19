@@ -23,24 +23,11 @@ class ProductController extends BaseController
         return $this->success($products, 'Product list fetched');
     }
 
-    // public function showProductDetails(string $slug)
-    // {
-    //     $product = Product::with([
-    //         'category',
-    //         'subcategory',
-    //         'images',
-    //         'features',
-    //         'specifications',
-    //         'reviews',
-    //         'variants'
-    //     ])->where('status', 1)->where('slug', $slug)->first();
-
-    //     if (!$product) {
-    //         return $this->error('Product not found', null, 404);
-    //     }
-
-    //     return $this->success($product, 'Product details fetched');
-    // }
+    public function premiumProduct()
+    {
+        $products = Product::with(['category','subcategory','images','features','specifications','reviews','variants'])->where('status', 1)->where('premium_product', 1)->latest()->get();
+        return $this->success($products, 'Premium product list fetched');
+    }
 
     public function showProductDetails(string $slug)
     {
@@ -118,6 +105,7 @@ class ProductController extends BaseController
             'name' => 'required|string|max:255',
             'name_meta' => 'nullable|string|max:255',
             'tag_line' => 'nullable|string|max:255',
+            'premium_product' => 'nullable|boolean',
 
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -151,6 +139,7 @@ class ProductController extends BaseController
 
             'name_meta' => $request->name_meta,
             'tag_line' => $request->tag_line,
+            'premium_product' => $request->premium_product,
 
             'price' => $request->price,
             'sale_price' => $request->sale_price,
@@ -208,6 +197,7 @@ class ProductController extends BaseController
             'name' => 'nullable|string|max:255',
             'name_meta' => 'nullable|string|max:255',
             'tag_line' => 'nullable|string|max:255',
+            'premium_product' => 'nullable|boolean',
 
             'price' => 'nullable|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -250,6 +240,7 @@ class ProductController extends BaseController
 
             'name_meta' => $request->name_meta,
             'tag_line' => $request->tag_line,
+            'premium_product' => $request->premium_product,
 
             'price' => $request->price,
             'sale_price' => $request->sale_price,
