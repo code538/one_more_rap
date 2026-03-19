@@ -33,6 +33,10 @@ class BannerController extends BaseController
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string|max:255',
 
+            'video' => 'nullable|mimes:mp4,mov,avi|max:10240',
+            'youtube_url' => 'nullable|url',
+            'banner_type' => 'required|in:image,video,youtube',
+
             'button1_text' => 'nullable|string|max:255',
             'button1_link' => 'nullable|string|max:255',
 
@@ -52,9 +56,13 @@ class BannerController extends BaseController
         }
 
         $imagePath = null;
+        $videoPath = null;
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('banners', 'public');
+        }
+        if ($request->hasFile('video')) {
+            $videoPath = $request->file('video')->store('banners/videos', 'public');
         }
 
         $banner = Banner::create([
@@ -64,6 +72,10 @@ class BannerController extends BaseController
 
             'image' => $imagePath,
             'image_alt' => $request->image_alt,
+
+            'video' => $videoPath,
+            'youtube_url' => $request->youtube_url,
+            'banner_type' => $request->banner_type,
 
             'button1_text' => $request->button1_text,
             'button1_link' => $request->button1_link,
@@ -110,6 +122,10 @@ class BannerController extends BaseController
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string|max:255',
 
+            'video' => 'nullable|mimes:mp4,mov,avi|max:10240',
+            'youtube_url' => 'nullable|url',
+            'banner_type' => 'required|in:image,video,youtube',
+
             'button1_text' => 'nullable|string|max:255',
             'button1_link' => 'nullable|string|max:255',
 
@@ -129,6 +145,7 @@ class BannerController extends BaseController
         }
 
         $imagePath = $banner->image;
+        $videoPath = $banner->video;
 
         if ($request->hasFile('image')) {
 
@@ -146,6 +163,10 @@ class BannerController extends BaseController
 
             'image' => $imagePath,
             'image_alt' => $request->image_alt,
+
+            'video' => $videoPath,
+            'youtube_url' => $request->youtube_url,
+            'banner_type' => $request->banner_type,
 
             'button1_text' => $request->button1_text,
             'button1_link' => $request->button1_link,
@@ -174,6 +195,10 @@ class BannerController extends BaseController
 
         if ($banner->image && Storage::disk('public')->exists($banner->image)) {
             Storage::disk('public')->delete($banner->image);
+        }
+
+        if ($banner->video && Storage::disk('public')->exists($banner->video)) {
+            Storage::disk('public')->delete($banner->video);
         }
 
         $banner->delete();

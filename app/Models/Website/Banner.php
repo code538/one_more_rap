@@ -13,8 +13,13 @@ class Banner extends Model
         'badge_text',
         'title',
         'description',
+        
         'image',
         'image_alt',
+        'video',
+        'youtube_url',
+        'banner_type',
+
         'button1_text',
         'button1_link',
         'button2_text',

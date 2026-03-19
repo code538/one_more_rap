@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('name_meta')->nullable();
+            $table->string('tag_line')->nullable();
 
             $table->decimal('price',10,2);
             $table->decimal('sale_price',10,2)->nullable();

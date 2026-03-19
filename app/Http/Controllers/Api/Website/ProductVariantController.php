@@ -22,7 +22,7 @@ class ProductVariantController extends BaseController
     {
         $request->validate([
             'product_id'=>'required',
-            'variant_name'=>'required',
+            'variant_name'=>'nullable',
             'price'=>'required',
             'stock'=>'required'
         ]);
@@ -61,7 +61,7 @@ class ProductVariantController extends BaseController
         $variant = ProductVariant::findOrFail($id);
 
         $variant->update([
-            'variant_name'=>$request->variant_name,
+            'variant_name'=>$request->variant_name ?? null,
             'color'=>$request->color,
             'size'=>$request->size,
             'price'=>$request->price,

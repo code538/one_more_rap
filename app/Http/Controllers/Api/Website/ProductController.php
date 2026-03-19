@@ -117,6 +117,7 @@ class ProductController extends BaseController
 
             'name' => 'required|string|max:255',
             'name_meta' => 'nullable|string|max:255',
+            'tag_line' => 'nullable|string|max:255',
 
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -149,6 +150,7 @@ class ProductController extends BaseController
             'slug' => Str::slug($request->name),
 
             'name_meta' => $request->name_meta,
+            'tag_line' => $request->tag_line,
 
             'price' => $request->price,
             'sale_price' => $request->sale_price,
@@ -205,6 +207,7 @@ class ProductController extends BaseController
 
             'name' => 'nullable|string|max:255',
             'name_meta' => 'nullable|string|max:255',
+            'tag_line' => 'nullable|string|max:255',
 
             'price' => 'nullable|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -246,6 +249,7 @@ class ProductController extends BaseController
             'slug' => Str::slug($request->name),
 
             'name_meta' => $request->name_meta,
+            'tag_line' => $request->tag_line,
 
             'price' => $request->price,
             'sale_price' => $request->sale_price,

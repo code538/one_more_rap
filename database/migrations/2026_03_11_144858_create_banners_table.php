@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('image_alt')->nullable();
 
+            $table->string('video')->nullable();
+            $table->string('youtube_url')->nullable();
+            $table->enum('banner_type', ['image', 'video', 'youtube'])->default('image');
+
             $table->string('button1_text')->nullable();
             $table->string('button1_link')->nullable();
 

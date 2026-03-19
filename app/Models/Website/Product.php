@@ -15,6 +15,7 @@ class Product extends Model
         'name',
         'slug',
         'name_meta',
+        'tag_line',
         'price',
         'sale_price',
         'stock',
