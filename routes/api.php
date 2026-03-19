@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\Website\PaymentController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Website\ProductVariantController;
+use App\Http\Controllers\Api\Website\BlogController;
 
 
 // Public Route Start ======================================
@@ -52,6 +53,9 @@ Route::get('products', [ProductController::class, 'userIndex']);
 Route::get('products/{slug}', [ProductController::class, 'showProductDetails']);
 Route::get('feature-products', [ProductController::class, 'getFeaturedProducts']);
 Route::get('/website-settings', [WebsiteSettingController::class, 'show']);
+
+Route::get('blogs', [BlogController::class, 'index']);
+Route::get('blogs/{slug}', [BlogController::class, 'showBySlug']);
 
 
 
@@ -143,6 +147,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('product-verients/{id}',[ProductVariantController::class,'edit']);
         Route::post('product-variants/update/{id}',[ProductVariantController::class,'update']);
         Route::delete('product-variants/{id}',[ProductVariantController::class,'destroy']);
+
+        Route::get('blogs', [BlogController::class, 'adminIndex']);
+        Route::post('blogs', [BlogController::class, 'store']);
+        Route::get('blogs/{id}', [BlogController::class, 'show']);
+        Route::post('blogs/{id}', [BlogController::class, 'update']);
+        Route::delete('blogs/{id}', [BlogController::class, 'destroy']);
 
     });
 
