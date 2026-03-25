@@ -18,6 +18,7 @@ class WebsiteSetting extends Model
         'site_mobile_logo',
         'site_logo_alt',
         'site_favicon',
+        'punch_line',
 
         // Contact details
         'phone',
