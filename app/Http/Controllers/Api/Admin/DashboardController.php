@@ -36,4 +36,37 @@ class DashboardController extends BaseController
 
     }
 
+    
+    public function salesDashboardCounts()
+    {
+
+        $data = [
+
+            'new_contacts' => Contact::where('status', 'new')->count(),
+            'replied_contacts' => Contact::where('status', 'replied')->count(),
+            'closed_contacts' => Contact::where('status', 'closed')->count(),
+
+        ];
+
+        return $this->success($data,'Dashboard data fetched successfully');
+
+    }
+
+    public function accountDashboardCounts()
+    {
+         $data = [
+
+            'total_orders' => Order::count(),
+
+            'total_collection' => Payment::where('status','paid')->sum('amount'),
+
+            'total_pending_orders' => Order::where('order_status','pending')->count(),
+
+            'total_payments' => Payment::count(),
+
+        ];
+
+        return $this->success($data,'Dashboard data fetched successfully');
+    }
+
 }

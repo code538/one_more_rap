@@ -15,7 +15,9 @@ return new class extends Migration {
             $table->string('site_web_logo')->nullable();        // header logo
             $table->string('site_mobile_logo')->nullable();
             $table->string('site_logo_alt')->nullable(); 
-            $table->string('site_favicon')->nullable();     // favicon
+            $table->string('site_favicon')->nullable();
+            $table->string('punch_line')->nullable();
+
 
             // Contact details
             $table->string('phone')->nullable();

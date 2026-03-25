@@ -20,6 +20,11 @@ return new class extends Migration
             $table->integer('rating');
             $table->text('review');
 
+            $table->enum('review_type', ['image', 'video', 'youtube_shorts'])->nullable();
+            $table->string('video')->nullable();
+            $table->string('image')->nullable();
+            $table->string('youtube_shorts')->nullable();
+
             $table->boolean('status')->default(1);
 
             $table->timestamps();

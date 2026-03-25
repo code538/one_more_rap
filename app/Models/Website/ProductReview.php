@@ -14,6 +14,10 @@ class ProductReview extends Model
         'customer_name',
         'rating',
         'review',
+        'review_type',
+        'video',
+        'image',
+        'youtube_shorts',
         'status'
     ];
 

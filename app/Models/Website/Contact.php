@@ -19,6 +19,7 @@ class Contact extends Model
         'subject',
         'message',
         'status',
+        'minutes',
     ];
 
     protected $casts = [

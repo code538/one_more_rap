@@ -46,6 +46,7 @@ class WebsiteSettingController extends BaseController
             'site_mobile_logo'  => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'site_logo_alt'     => 'nullable|string|max:255',
             'site_favicon'      => 'nullable|image|mimes:png,ico|max:1024',
+            'punch_line'        => 'nullable|string|max:255',
 
             'phone'             => 'nullable|string|max:50',
             'landline'          => 'nullable|string|max:50',
@@ -133,6 +134,7 @@ class WebsiteSettingController extends BaseController
             'site_mobile_logo'  => 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
             'site_logo_alt'     => 'nullable|string|max:255',
             'site_favicon'      => 'nullable|image|mimes:png,ico|max:1024',
+            'punch_line'        => 'nullable|string|max:255',
 
             'phone'             => 'nullable|string|max:50',
             'landline'          => 'nullable|string|max:50',

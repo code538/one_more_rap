@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Website\ProductVariantController;
 use App\Http\Controllers\Api\Website\BlogController;
+use App\Http\Controllers\Api\Website\AboutPageController;
+use App\Http\Controllers\Api\Website\CmsPageController;
 
 
 // Public Route Start ======================================
@@ -58,6 +60,11 @@ Route::get('/website-settings', [WebsiteSettingController::class, 'show']);
 
 Route::get('blogs', [BlogController::class, 'index']);
 Route::get('blogs/{slug}', [BlogController::class, 'showBySlug']);
+Route::get('short-video',[ProductReviewController::class, 'shortsReview']);
+
+Route::get('about', [AboutPageController::class, 'userIndex']);
+Route::get('cms-pages', [CmsPageController::class, 'userIndex']);
+Route::get('cms-pages/{slug}', [CmsPageController::class, 'cmsDetails']);
 
 
 
@@ -71,13 +78,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
  
-    Route::middleware('role:admin')->prefix('admin')->group(function () {
+    Route::middleware('role:admin,sales,accounts')->prefix('admin')->group(function () {
 
         Route::get('/dashboard', function () {
             return ['message' => 'Admin area'];
         });
 
         // all admin API here
+
+        Route::post('/add-employee', [AuthController::class, 'addEmployee']);
+        Route::get('/employee-details', [AuthController::class, 'employeeDetails']);
 
         Route::get('/seo', [SeoSettingController::class, 'index']);
         Route::post('/seo', [SeoSettingController::class, 'store']);
@@ -155,6 +165,30 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('blogs/{id}', [BlogController::class, 'show']);
         Route::post('blogs/{id}', [BlogController::class, 'update']);
         Route::delete('blogs/{id}', [BlogController::class, 'destroy']);
+
+        // Sales route 
+        Route::get('/sales-dashboard',[DashboardController::class,'salesDashboardCounts']);
+        Route::get('sales-contacts', [ContactController::class, 'index']);
+        Route::get('sales-contacts/{id}', [ContactController::class, 'show']);
+        Route::patch('sales-contacts/status/{id}', [ContactController::class, 'updateStatus']);
+        
+        Route::get('/accounts-dashboard',[DashboardController::class,'accountDashboardCounts']);
+        Route::get('/accounts-orders',[OrderController::class,'index']);
+        Route::get('/accounts-orders/{id}',[OrderController::class,'show']);
+        Route::post('/accounts-orders/status/{id}',[OrderController::class,'updateStatus']);
+        Route::post('/accounts-orders/payment/{id}',[OrderController::class,'updatePayment']);
+
+        Route::get('about', [AboutPageController::class, 'index']);
+        Route::post('about', [AboutPageController::class, 'store']);
+        Route::get('about/{id}', [AboutPageController::class, 'edit']);
+        Route::post('about/{id}', [AboutPageController::class, 'update']);
+        Route::delete('about/{id}', [AboutPageController::class, 'destroy']);
+
+        Route::get('cms-pages', [CmsPageController::class, 'index']);
+        Route::get('cms-pages/{id}', [CmsPageController::class, 'show']);
+        Route::post('cms-pages', [CmsPageController::class, 'store']);
+        Route::post('cms-pages/{id}', [CmsPageController::class, 'update']);
+        Route::delete('cms-pages/{id}', [CmsPageController::class, 'destroy']);
 
     });
 

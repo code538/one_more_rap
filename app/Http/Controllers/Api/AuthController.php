@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,6 +39,34 @@ class AuthController extends BaseController
             'token' => $user->createToken('api-token')->plainTextToken,
             'user'  => $user
         ], 'User registered successfully', 201);
+    }
+
+    public function addEmployee(Request $request)
+    {   
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'nullable|string',
+            'password' => 'required|min:6',
+            'role' => 'in:sales,accounts'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation error', $validator->errors(), 422);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => $request->password,
+            'role' => $request->role ?? 'user',
+        ]);
+
+        return $this->success([
+            'token' => $user->createToken('api-token')->plainTextToken,
+            'user'  => $user
+        ], 'Employee add successfully', 201);
     }
 
     //Login
@@ -181,6 +210,13 @@ class AuthController extends BaseController
             'user' => $user,
             'token' => $newToken
         ], 'Profile updated successfully');
+    }
+
+    public function employeeDetails()
+    {
+        $users = User::whereIn('role', ['sales', 'accounts'])->get();
+
+        return $this->success($users, 'Employees fetched successfully');
     }
     
 

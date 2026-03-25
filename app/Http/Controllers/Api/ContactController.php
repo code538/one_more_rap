@@ -105,6 +105,7 @@ class ContactController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'status' => 'required|in:new,replied,closed',
+            'minutes'=> 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -112,6 +113,7 @@ class ContactController extends BaseController
         }
 
         $contact->status = $request->status;
+        $contact->minutes = $request->minutes;
         $contact->save();
 
         return $this->success($contact, 'Status updated successfully');

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status', ['new', 'replied', 'closed'])
                   ->default('new')
                   ->index();
+            $table->text('minutes')->nullable();      
 
             $table->timestamps();
         });
