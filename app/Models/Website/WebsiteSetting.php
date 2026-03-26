@@ -23,6 +23,7 @@ class WebsiteSetting extends Model
         // Contact details
         'phone',
         'landline',
+        'whats_app',
         'email',
         'fax',
 

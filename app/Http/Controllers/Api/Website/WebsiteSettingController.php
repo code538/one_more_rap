@@ -50,6 +50,7 @@ class WebsiteSettingController extends BaseController
 
             'phone'             => 'nullable|string|max:50',
             'landline'          => 'nullable|string|max:50',
+            'whats_app'          => 'nullable|string|max:50',
             'email'             => 'nullable|email',
             'fax'               => 'nullable|string|max:50',
 
@@ -138,6 +139,7 @@ class WebsiteSettingController extends BaseController
 
             'phone'             => 'nullable|string|max:50',
             'landline'          => 'nullable|string|max:50',
+            'whats_app'          => 'nullable|string|max:50',
             'email'             => 'nullable|email',
             'fax'               => 'nullable|string|max:50',
 

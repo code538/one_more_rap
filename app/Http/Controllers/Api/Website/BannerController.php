@@ -27,7 +27,7 @@ class BannerController extends BaseController
     {
         $validator = Validator::make($request->all(), [
             'badge_text' => 'nullable|string|max:255',
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
 
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -107,7 +107,7 @@ class BannerController extends BaseController
 
     public function update(Request $request, int $id)
     {   
-        
+        //dd($request->hasFile('video'));
         $banner = Banner::find($id);
 
         if (!$banner) {
@@ -116,13 +116,13 @@ class BannerController extends BaseController
 
         $validator = Validator::make($request->all(), [
             'badge_text' => 'nullable|string|max:255',
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
 
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'image_alt' => 'nullable|string|max:255',
 
-            'video' => 'nullable|mimes:mp4,mov,avi|max:10240',
+            //'video' => 'nullable|file|mimes:mp4,mov,avi|mimetypes:video/mp4,video/quicktime,video/x-msvideo|max:10240',
             'youtube_url' => 'nullable|url',
             'banner_type' => 'required|in:image,video,youtube',
 
@@ -154,6 +154,15 @@ class BannerController extends BaseController
             }
 
             $imagePath = $request->file('image')->store('banners', 'public');
+        }
+        if ($request->hasFile('video')) {
+
+            if ($banner->video && Storage::disk('public')->exists($banner->video)) {
+                Storage::disk('public')->delete($banner->video);
+            }
+
+            $videoPath = $request->file('video')->store('banners/videos', 'public');
+            //dd($videoPath);
         }
 
         $banner->update([

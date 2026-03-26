@@ -22,6 +22,7 @@ return new class extends Migration {
             // Contact details
             $table->string('phone')->nullable();
             $table->string('landline')->nullable();
+            $table->string('whats_app')->nullable();
             $table->string('email')->nullable();
             $table->string('fax')->nullable();
 
