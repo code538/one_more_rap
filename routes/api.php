@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\Website\ProductVariantController;
 use App\Http\Controllers\Api\Website\BlogController;
 use App\Http\Controllers\Api\Website\AboutPageController;
 use App\Http\Controllers\Api\Website\CmsPageController;
+use App\Http\Controllers\Api\Website\ShortVideoController;
 
 
 // Public Route Start ======================================
@@ -65,6 +66,8 @@ Route::get('short-video',[ProductReviewController::class, 'shortsReview']);
 Route::get('about', [AboutPageController::class, 'userIndex']);
 Route::get('cms-pages', [CmsPageController::class, 'userIndex']);
 Route::get('cms-pages/{slug}', [CmsPageController::class, 'cmsDetails']);
+
+Route::get('/short-videos', [ShortVideoController::class, 'userIndex']);
 
 
 
@@ -189,6 +192,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('cms-pages', [CmsPageController::class, 'store']);
         Route::post('cms-pages/{id}', [CmsPageController::class, 'update']);
         Route::delete('cms-pages/{id}', [CmsPageController::class, 'destroy']);
+
+        Route::get('/short-videos', [ShortVideoController::class, 'index']);
+        Route::post('/short-videos', [ShortVideoController::class, 'store']);
+        Route::get('short-videos/{id}', [ShortVideoController::class, 'show']);
+        Route::post('short-videos/{id}', [ShortVideoController::class, 'update']); // using POST for file upload
+        Route::delete('short-videos/{id}', [ShortVideoController::class, 'destroy']);
 
     });
 
