@@ -39,10 +39,6 @@ class ProductVariantController extends BaseController
 
         return $this->success($variant, 'Variant created successfully');
 
-        // return response()->json([
-        //     'message'=>'Variant created successfully',
-        //     'data'=>$variant
-        // ]);
     }
 
     public function edit ($id){

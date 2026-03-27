@@ -119,9 +119,9 @@ class ShortVideoController extends BaseController
             'video_title' => $request->video_title ?? $video->video_title,
             'video' => $videoPath,
             'youtube_link' => $request->youtube_link ?? $video->youtube_link,
-            'button_name' => $request->button_name ?? $video->button_name,
-            'button_url' => $request->button_url ?? $video->button_url,
-            'status' => $request->status ?? $video->status,
+            'button_name' => $request->button_name,
+            'button_url' => $request->button_url,
+            'status' => $request->status,
         ]);
 
         return $this->success($video, 'Short video updated');
