@@ -116,7 +116,7 @@ class ShortVideoController extends BaseController
         }
 
         $video->update([
-            'video_title' => $request->video_title ?? $video->video_title,
+            'video_title' => $request->video_title,
             'video' => $videoPath,
             'youtube_link' => $request->youtube_link ?? $video->youtube_link,
             'button_name' => $request->button_name,
