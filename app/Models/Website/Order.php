@@ -23,6 +23,10 @@ class Order extends Model
         'state',
         'pincode',
 
+        'shiprocket_order_id',
+        'shiprocket_shipment_id',
+        'shiprocket_awb',
+
         'total_amount',
         'payment_method',
         'payment_status',

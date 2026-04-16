@@ -21,8 +21,10 @@ use App\Http\Controllers\Api\Website\WhyChoseUsController;
 use App\Http\Controllers\Api\Website\PaymentSettingController;
 use App\Http\Controllers\Api\Website\CheckoutController;
 use App\Http\Controllers\Api\Website\PaymentController;
+use App\Http\Controllers\Api\Website\ShiprocketSettingController;
 use App\Http\Controllers\Api\Admin\OrderController;
 use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\ShiprocketController;
 use App\Http\Controllers\Api\Website\ProductVariantController;
 use App\Http\Controllers\Api\Website\BlogController;
 use App\Http\Controllers\Api\Website\AboutPageController;
@@ -150,10 +152,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/payment-settings/{provider}', [PaymentSettingController::class, 'show']);
         Route::post('/payment-settings/status/{id}', [PaymentSettingController::class, 'updateStatus']);
 
+        // Shiprocket master settings
+        Route::get('/shiprocket-settings', [ShiprocketSettingController::class, 'index']);
+        Route::post('/shiprocket-settings/store', [ShiprocketSettingController::class, 'store']);
+        Route::get('/shiprocket-settings/{id}', [ShiprocketSettingController::class, 'show']);
+        Route::post('/shiprocket-settings/status/{id}', [ShiprocketSettingController::class, 'updateStatus']);
+
         Route::get('/orders',[OrderController::class,'index']);
         Route::get('/orders/{id}',[OrderController::class,'show']);
         Route::post('/orders/status/{id}',[OrderController::class,'updateStatus']);
         Route::post('/orders/payment/{id}',[OrderController::class,'updatePayment']);
+
+        // Shiprocket (delivery partner) integration
+        Route::get('/shiprocket/pickup-locations', [ShiprocketController::class, 'pickupLocations']);
+        Route::post('/shiprocket/orders/{orderId}/create', [ShiprocketController::class, 'createForOrder']);
+        Route::post('/shiprocket/orders/{orderId}/awb', [ShiprocketController::class, 'generateAwb']);
+        Route::get('/shiprocket/track/awb/{awb}', [ShiprocketController::class, 'trackByAwb']);
 
         Route::get('/dashboard',[DashboardController::class,'dashboardCounts']);
 
