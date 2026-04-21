@@ -231,6 +231,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/my-compleate-orders',[CheckoutController::class,'myCompleateOrders']);
         Route::get('/my-compleate-orders/details/{id}',[CheckoutController::class,'myCompleateOrdersDetails']);
+
+        Route::get('/testing',[CheckoutController::class,'testing']);
     
     });
 
